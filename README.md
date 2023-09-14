@@ -20,6 +20,8 @@ As of macOS 14 Sonoma:
 1. SettingsAccess provides a custom button style that can be applied directly to `SettingsLink` in order to execute code before and/or after the button press action occurs.
 2. SettingsAccess provides an environment method called `openSettings` that can be called anywhere in the view hierarchy to programmatically open the Settings scene.
 
+In addition, SettingsAccess is backwards compatible from macOS 11 Big Sur and later. Calling `openSettings()` will use the correct method to open the Settings scene for each operating system automatically.
+
 ## Using the Package
 
 ### Swift Package Manager (SPM)
