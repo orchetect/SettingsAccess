@@ -1,5 +1,5 @@
 //
-//  SettingsLinkButtonStyle.swift
+//  OpenSettingsInjectionView.swift
 //  SettingsAccess • https://github.com/orchetect/SettingsAccess
 //  © 2023 Steffan Andrews • Licensed under MIT License
 //
@@ -36,7 +36,8 @@ extension EnvironmentValues {
 @available(tvOS, unavailable)
 @available(watchOS, unavailable)
 extension View {
-    /// Wires up the `openSettings` environment method for a view heirarchy that allows opening the app's Settings scene.
+    /// Wires up the `openSettings` environment method for a view hierarchy that allows opening the
+    /// app's Settings scene.
     ///
     /// Example usage:
     ///
