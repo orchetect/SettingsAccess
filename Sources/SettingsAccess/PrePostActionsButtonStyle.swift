@@ -15,9 +15,6 @@ import SwiftUI
 @available(iOS, unavailable)
 @available(tvOS, unavailable)
 @available(watchOS, unavailable)
-#if swift(>=5.9)
-@available(visionOS, unavailable)
-#endif
 public struct PrePostActionsButtonStyle: PrimitiveButtonStyle {
     public let preTapAction: (() -> Void)?
     public let postTapAction: (() -> Void)?
@@ -63,9 +60,6 @@ public struct PrePostActionsButtonStyle: PrimitiveButtonStyle {
 @available(iOS, unavailable)
 @available(tvOS, unavailable)
 @available(watchOS, unavailable)
-#if swift(>=5.9)
-@available(visionOS, unavailable)
-#endif
 private struct PrePostActionsButtonStyleModifier: ViewModifier {
     let preTapAction: (() -> Void)?
     let postTapAction: (() -> Void)?
@@ -96,9 +90,6 @@ private struct PrePostActionsButtonStyleModifier: ViewModifier {
 @available(iOS, unavailable)
 @available(tvOS, unavailable)
 @available(watchOS, unavailable)
-#if swift(>=5.9)
-@available(visionOS, unavailable)
-#endif
 extension View {
     /// Convenience to apply ``PrePostActionsButtonStyle``.
     /// Allows execution of code before and/or after user clicks a button.

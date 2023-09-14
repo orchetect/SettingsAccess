@@ -15,9 +15,6 @@ import SwiftUI
 @available(iOS, unavailable)
 @available(tvOS, unavailable)
 @available(watchOS, unavailable)
-#if swift(>=5.9)
-@available(visionOS, unavailable)
-#endif
 private struct OpenSettingsKey: EnvironmentKey {
     static let defaultValue: () -> Void = { }
 }
@@ -26,9 +23,6 @@ private struct OpenSettingsKey: EnvironmentKey {
 @available(iOS, unavailable)
 @available(tvOS, unavailable)
 @available(watchOS, unavailable)
-#if swift(>=5.9)
-@available(visionOS, unavailable)
-#endif
 extension EnvironmentValues {
     /// Opens the app's Settings scene. Call this as a method.
     public var openSettings: () -> Void {
@@ -41,9 +35,6 @@ extension EnvironmentValues {
 @available(iOS, unavailable)
 @available(tvOS, unavailable)
 @available(watchOS, unavailable)
-#if swift(>=5.9)
-@available(visionOS, unavailable)
-#endif
 extension View {
     /// Wires up the `openSettings` environment method for a view heirarchy that allows opening the app's Settings scene.
     ///
@@ -76,9 +67,6 @@ extension View {
 @available(iOS, unavailable)
 @available(tvOS, unavailable)
 @available(watchOS, unavailable)
-#if swift(>=5.9)
-@available(visionOS, unavailable)
-#endif
 internal struct OpenSettingsInjectionView<Content: View>: View {
     @Environment(\.openSettings) public var openSettings
     @State private var closure: () -> Void = {
@@ -92,6 +80,7 @@ internal struct OpenSettingsInjectionView<Content: View>: View {
             if #available(macOS 14, *) {
                 // make a hidden settings link so we can hijack it's button action
                 ZStack {
+#if swift(>=5.9) // prevents compile error in Xcode 14 because SettingsLink is not in its macOS SDK
                     SettingsLink {
                         // Text(verbatim: "")
                         Rectangle().fill(.clear)
@@ -100,6 +89,7 @@ internal struct OpenSettingsInjectionView<Content: View>: View {
                     .prePostActionsButtonStyle(performAction: $closure)
                     .frame(width: 0, height: 0)
                     .opacity(0) // TODO: not sure if this is needed or will work
+#endif
                     
                     content
                 }
