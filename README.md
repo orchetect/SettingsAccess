@@ -20,31 +20,61 @@ As of macOS 14 Sonoma:
 1. SettingsAccess provides a custom button style that can be applied directly to `SettingsLink` in order to execute code before and/or after the button press action occurs.
 2. SettingsAccess provides an environment method called `openSettings` that can be called anywhere in the view hierarchy to programmatically open the Settings scene.
 
-## Getting Started
+## Using the Package
 
 ### Swift Package Manager (SPM)
 
-1. Add SettingsAccess as a dependency using Swift Package Manager.
+Add SettingsAccess as a dependency using Swift Package Manager.
 
-   - In an app project or framework, in Xcode:
+- In an app project or framework, in Xcode:
 
-     Select the menu: **File → Swift Packages → Add Package Dependency...**
+  Select the menu: **File → Swift Packages → Add Package Dependency...**
 
-     Enter this URL: `https://github.com/orchetect/SettingsAccess`
+  Enter this URL: `https://github.com/orchetect/SettingsAccess`
 
-   - In a Swift Package, add it to the Package.swift dependencies:
+- In a Swift Package, add it to the Package.swift dependencies:
 
-     ```swift
-     .package(url: "https://github.com/orchetect/SettingsAccess", from: "1.0.0")
-     ```
+  ```swift
+  .package(url: "https://github.com/orchetect/SettingsAccess", from: "1.0.0")
+  ```
 
-2. Import the library:
+## Getting Started
+
+1. Import the library.
 
    ```swift
    import SettingsAccess
    ```
 
-3. Try the [Demo](Demo) example project to see the library in action.
+2. Attach the `openSettingsAccess` view modifier to the base view which needs access to the `openSettings` method.
+
+   ```swift
+   @main
+   struct MyApp: App {
+       var body: some Scene {
+           WindowGroup {
+               ContentView()
+                   .openSettingsAccess()
+           }
+       }
+   }
+   ```
+
+3. In any subview where needed, add the environment method declaration. Then the Settings scene may be opened programmatically by calling this method.
+
+   ```swift
+   struct ContentView: View {
+       @Environment(\.openSettings) private var openSettings
+     
+       var body: some View {
+           Button("Open Settings") { openSettings() }
+       }
+   }
+   ```
+
+## Example Code
+
+Try the [Demo](Demo) example project to see the library in action.
 
 ## Requirements
 
