@@ -70,7 +70,7 @@ extension View {
 internal struct OpenSettingsInjectionView<Content: View>: View {
     @Environment(\.openSettings) public var openSettings
     @State private var closure: () -> Void = {
-        showSettingsWindowLegacy()
+        openSettingsLegacyOS()
     }
     
     public let content: Content
