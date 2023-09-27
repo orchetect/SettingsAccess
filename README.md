@@ -6,24 +6,34 @@
 
 As of macOS 14 Sonoma:
 
-- Apple completely removed the ability to open the SwiftUI Settings scene using legacy `NSApp.sendAction()` method using the `showSettingsWindow:` (macOS 13) or `showPreferencesWindow:` (macOS 12 and earlier) selectors. The only available method of opening the Settings scene apart from the _App menu → Settings_ menu item is to use the new [`SettingsLink`](https://developer.apple.com/documentation/swiftui/settingslink) view.
+- Apple completely removed the ability to open the SwiftUI Settings scene using legacy `NSApp.sendAction()` method using the `showSettingsWindow:` (macOS 13) or `showPreferencesWindow:` (macOS 12 and earlier) selectors. The only available method of opening the Settings scene (apart from the _App menu → Settings_ menu item) is to use the new [`SettingsLink`](https://developer.apple.com/documentation/swiftui/settingslink) view.
 
   ![No Dice](Images/no-dice.png)
 
 - This presents two major restrictions:
-  1. `SettingsLink` is a view that wraps a standard SwiftUI `Button`. There is no way to detect when the user has clicked this button if additional code is desired to run in addition to the intrinsic behavior of opening the Settings scene. Due to how SwiftUI works, it is impossible to attach a simultaneous gesture to attempt to detect a button press.
-  2. There is **no** way to programmatically open the Settings scene.
+  1. There is no way to detect when the user has clicked this button if additional code is desired to run before or after the opening of the `Settings` scene.
+  2. There is **no** way to programmatically open the `Settings` scene.
   
-- These restrictons become problematic in many scenarios. Some examples that are currently impossible without SettingsAccess:
-  - You are building a window-based MenuBarExtra and want to have a button that opens Settings and also dismisses the window.
-  - You want to open the Settings scene in reponse to a user action in your application that requires the user manipulate a setting that may be invalid.
+- These restrictons become problematic in many scenarios. Some examples that are currently impossible without **SettingsAccess**:
+  - You are building a window-based `MenuBarExtra` and want to have a button that opens `Settings` and also dismisses the window.
+  - You want to open the `Settings` scene in response to a user action in your application that requires the user manipulate a setting that may be invalid.
 
 ## Solution
 
-1. SettingsAccess provides a custom button style that can be applied directly to `SettingsLink` in order to execute code before and/or after the button press action occurs.
-2. SettingsAccess provides an environment method called `openSettings` that can be called anywhere in the view hierarchy to programmatically open the Settings scene.
+- **SettingsAccess** provides an environment method called `openSettings()` that can be called anywhere in the view hierarchy to programmatically open the Settings scene. (See [Getting Started](#Getting-Started) below for an example of its usage.)
 
-In addition, SettingsAccess is backwards compatible from macOS 11 Big Sur and later. Calling `openSettings()` will use the correct method to open the Settings scene for each operating system automatically.
+- **SettingsAccess** is also backwards compatible from macOS 11 Big Sur and later. Calling `openSettings()` will use the correct method to open the Settings scene for each supported operating system automatically.
+- No private API is used, so it is safe for the Mac App Store.
+
+## How It Works (For Nerds)
+
+`SettingsLink` is a view that wraps a standard SwiftUI `Button` and its action calls a private environment method called `_openSettings` which we have no access to publicly. (A radar has been submitted asking Apple to make it public, but until that happens - if ever - **SettingsAccess** is the solution.)
+
+Also, due to how SwiftUI `Button` works, it is impossible to attach a simultaneous gesture to attempt to detect a button press.
+
+**SettingsAccess** uses a custom `Button` style which, when applied directly to `SettingsLink`, allows us to capture the `Button` press action and export a wrapper method as an environment method called `openSettings` that we can use.
+
+More info and a deep-dive can be found in [this reddit post](https://www.reddit.com/r/SwiftUI/comments/16ibgy3/settingslink_on_macos_14_why_it_sucks_and_how_i/).
 
 ## Using the Package
 
