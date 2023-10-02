@@ -67,11 +67,13 @@ import SettingsAccess
                ContentView()
                    .openSettingsAccess()
            }
+           
+           Settings { SettingsView() }
        }
    }
    ```
 
-- In any subview where needed, add the environment method declaration. Then the Settings scene may be opened programmatically by calling this method.
+- In any subview where needed, add the environment method declaration. Then the `Settings` scene may be opened programmatically by calling this method.
 
    ```swift
    struct ContentView: View {
@@ -97,6 +99,8 @@ struct MyApp: App {
             AppMenuView()
                 // Do not attach .openSettingsAccess()
         }
+        
+        Settings { SettingsView() }
     }
 }
 
