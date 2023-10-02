@@ -80,7 +80,7 @@ internal struct OpenSettingsInjectionView<Content: View>: View {
         if #available(macOS 14, *) {
             // make a hidden settings link so we can hijack its button action
             content
-                .overlay {
+                .background {
                     #if swift(>=5.9) // prevents compile error in Xcode 14 because SettingsLink is not in its macOS SDK
                     SettingsLink {
                         // Text(verbatim: "")
