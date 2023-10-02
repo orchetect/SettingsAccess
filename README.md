@@ -95,7 +95,7 @@ Try the [Demo](Demo) example project to see the library in action.
 
 Requires Xcode 15.0 or higher.
 
-Supports macOS 11.0+.
+Supports macOS 11.0 or higher.
 
 ## Author
 
