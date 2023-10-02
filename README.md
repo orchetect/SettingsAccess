@@ -57,7 +57,7 @@ import SettingsAccess
 
 ### 1. Open Settings Programmatically
 
-- Attach the `openSettingsAccess` view modifier to the base view which needs access to the `openSettings` method.
+- Attach the `openSettingsAccess` view modifier to the base view whose subviews needs access to the `openSettings` method.
 
    ```swift
    @main
