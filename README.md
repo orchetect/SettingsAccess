@@ -97,6 +97,10 @@ Requires Xcode 15.0 or higher.
 
 Supports macOS 11.0 or higher.
 
+## Known Issues
+
+- It is not possible to call `openSettings()` from within a menu-based MenuBarExtra due to how SwiftUI builds menus. See [this thread](https://github.com/orchetect/SettingsAccess/issues/2) for details.
+
 ## Author
 
 Coded by a bunch of 🐹 hamsters in a trenchcoat that calls itself [@orchetect](https://github.com/orchetect).
