@@ -1,6 +1,6 @@
 # SettingsAccess
 
-[![Platforms - macOS 11+](https://img.shields.io/badge/platforms-macOS%2011+-lightgrey.svg?style=flat)](https://developer.apple.com/swift) ![Swift 5.3-5.9](https://img.shields.io/badge/Swift-5.3–5.9-orange.svg?style=flat) [![Xcode 14-15](https://img.shields.io/badge/Xcode-14–15-blue.svg?style=flat)](https://developer.apple.com/swift) [![License: MIT](http://img.shields.io/badge/license-MIT-lightgrey.svg?style=flat)](https://github.com/orchetect/SettingsAccess/blob/main/LICENSE)
+[![Platforms - macOS 11+](https://img.shields.io/badge/platforms-macOS%2011+-lightgrey.svg?style=flat)](https://developer.apple.com/swift) ![Swift 5.9](https://img.shields.io/badge/Swift-5.9-orange.svg?style=flat) [![Xcode 15](https://img.shields.io/badge/Xcode-15-blue.svg?style=flat)](https://developer.apple.com/swift) [![License: MIT](http://img.shields.io/badge/license-MIT-lightgrey.svg?style=flat)](https://github.com/orchetect/SettingsAccess/blob/main/LICENSE)
 
 ## Why
 
