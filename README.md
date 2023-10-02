@@ -15,27 +15,19 @@ As of macOS 14 Sonoma:
   2. There is **no** way to programmatically open the `Settings` scene.
   
 - These restrictions become problematic in many scenarios. Some examples that are currently impossible without **SettingsAccess**:
-  - You are building a window-based `MenuBarExtra` and want to have a button that opens `Settings` and also dismisses the window.
+  - You are building a window-based `MenuBarExtra` and want to have a button that activates the app, opens `Settings`, and then also dismisses the window.
   - You want to open the `Settings` scene in response to a user action in your application that requires the user manipulate a setting that may be invalid.
 
 ## Solution
 
-- **SettingsAccess** provides an environment method called `openSettings()` that can be called anywhere in the view hierarchy to programmatically open the Settings scene. (See [Getting Started](#Getting-Started) below for an example of its usage.)
-  - Due to SwiftUI limitations, this method is not usable inside of menus (including menu-based MenuBarExtra). In that scenario, a `SettingsLink(label:preAction:postAction:)` initializer is provided to allow custom code to run before and/or after the `Settings` scene is opened.
-- **SettingsAccess** is also backwards compatible from macOS 11 Big Sur and later. Calling `openSettings()` will use the correct method to open the Settings scene for each supported operating system automatically.
+- **SettingsAccess** provides an environment method called `openSettings()` that can be called anywhere in the view hierarchy to programmatically open the `Settings` scene.
+  
+  > Note: Due to SwiftUI limitations, this method is not usable within a `menu`-based `MenuBarExtra`. In that context, the custom `SettingsLink` initializer described below may be used.
+- **SettingsAccess** also provides an initializer for `SettingsLink` which provides two closures allowing execution of arbitrary code before and/or after opening the `Settings` scene.
+- The library is backwards compatible with macOS 11 Big Sur and later.
 - No private API is used, so it is safe for the Mac App Store.
 
-## How It Works (For Nerds)
-
-`SettingsLink` is a view that wraps a standard SwiftUI `Button` and its action calls a private environment method called `_openSettings` which we have no access to publicly. (A radar has been submitted asking Apple to make it public, but until that happens - if ever - **SettingsAccess** is the solution.)
-
-Also, due to how SwiftUI `Button` works, it is impossible to attach a simultaneous gesture to attempt to detect a button press.
-
-**SettingsAccess** uses a custom `Button` style which, when applied directly to `SettingsLink`, allows us to capture the `Button` press action and export a wrapper method as an environment method called `openSettings` that we can use.
-
-The same button style is usable on `SettingsLink` directly in order to run code before and/or after the `Settings` scene is opened.
-
-More info and a deep-dive can be found in [this reddit post](https://www.reddit.com/r/SwiftUI/comments/16ibgy3/settingslink_on_macos_14_why_it_sucks_and_how_i/).
+See [Getting Started](#Getting-Started) below for example usage.
 
 ## Using the Package
 
@@ -52,18 +44,20 @@ Add SettingsAccess as a dependency using Swift Package Manager.
 - In a Swift Package, add it to the Package.swift dependencies:
 
   ```swift
-  .package(url: "https://github.com/orchetect/SettingsAccess", from: "1.0.0")
+  .package(url: "https://github.com/orchetect/SettingsAccess", from: "1.2.0")
   ```
 
 ## Getting Started
 
-1. Import the library.
+Import the library.
 
-   ```swift
-   import SettingsAccess
-   ```
+```swift
+import SettingsAccess
+```
 
-2. Attach the `openSettingsAccess` view modifier to the base view which needs access to the `openSettings` method.
+### 1. Open Settings Programmatically
+
+- Attach the `openSettingsAccess` view modifier to the base view which needs access to the `openSettings` method.
 
    ```swift
    @main
@@ -77,8 +71,7 @@ Add SettingsAccess as a dependency using Swift Package Manager.
    }
    ```
 
-3. In any subview where needed, add the environment method declaration. Then the Settings scene may be opened
-   programmatically by calling this method.
+- In any subview where needed, add the environment method declaration. Then the Settings scene may be opened programmatically by calling this method.
 
    ```swift
    struct ContentView: View {
@@ -90,26 +83,37 @@ Add SettingsAccess as a dependency using Swift Package Manager.
    }
    ```
 
-4. If using a menu-based MenuBarExtra, do not apply `.openSettingsAccess()` to the enclosed menu.
-   `openSettings()` cannot be used here due to limitations of SwiftUI limitations. Instead, use the custom
-   `SettingsLink` initializer to run code before and/or after the menu item opens the `Settings` scene if desired.
-   
-   ```swift
-   @main
-   struct MyApp: App {
-       var body: some Scene {
-           MenuBarExtra {
-               SettingsLink {
-                    Text("Settings...")
-               } preAction: {
-                   // code to run before Settings opens
-               } postAction: {
-                   // code to run after Settings opens
-               }
-           }
-       }
-   }
-   ```
+### 2. Use in a MenuBarExtra Menu
+
+If using a menu-based `MenuBarExtra`, do not apply `.openSettingsAccess()` to the menu content. `openSettings()` cannot be used due to limitations of SwiftUI.
+
+Instead, use the custom `SettingsLink` initializer to add a Settings menu item capable of running code before and/or after opening the `Settings` scene.
+
+```swift
+@main
+struct MyApp: App {
+    var body: some Scene {
+        MenuBarExtra {
+            AppMenuView()
+                // Do not attach .openSettingsAccess()
+        }
+    }
+}
+
+struct AppMenuView: View {
+    var body: some View {
+        SettingsLink { 
+            Text("Settings...")
+        } preAction: {
+            // code to run before Settings opens
+        } postAction: {
+            // code to run after Settings opens
+        }
+        
+        Button("Quit") { NSApp.terminate(nil) }
+    }
+}
+```
 
 ## Example Code
 
@@ -120,6 +124,16 @@ Try the [Demo](Demo) example project to see the library in action.
 Requires Xcode 15.0 or higher.
 
 Supports macOS 11.0 or higher.
+
+## How It Works (For Nerds)
+
+`SettingsLink` is a view that wraps a standard SwiftUI `Button` and its action calls a private environment method called `_openSettings` which we have no access to publicly. (A radar has been submitted asking Apple to make it public, but that may never happen.)
+
+It is worth noting that due to how SwiftUI `Button` works, it is impossible to attach a simultaneous gesture to attempt to detect a button press.
+
+The solution is the use of a custom `Button` style which, when applied directly to `SettingsLink`, allows us to capture the `Button` press action and export a wrapper method as an environment method called `openSettings` that we can use. This same button style can also let us run arbitrary code before and/or after the button action is triggered by the user.
+
+More info and a deep-dive can be found in [this reddit post](https://www.reddit.com/r/SwiftUI/comments/16ibgy3/settingslink_on_macos_14_why_it_sucks_and_how_i/).
 
 ## Author
 
