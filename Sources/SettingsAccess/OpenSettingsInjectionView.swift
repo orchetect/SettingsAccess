@@ -81,14 +81,12 @@ internal struct OpenSettingsInjectionView<Content: View>: View {
             // make a hidden settings link so we can hijack its button action
             content
                 .background {
-                    #if swift(>=5.9) // prevents compile error in Xcode 14 because SettingsLink is not in its macOS SDK
                     SettingsLink {
                         Rectangle().fill(.clear)
                     }
                     .prePostActionsButtonStyle(performAction: $closure)
                     .frame(width: 0, height: 0)
                     .opacity(0)
-                    #endif
                 }
                 .environment(\.openSettings, $closure.wrappedValue)
         } else {
