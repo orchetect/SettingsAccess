@@ -20,7 +20,7 @@ public struct PrePostActionsButtonStyle: PrimitiveButtonStyle {
     public let postTapAction: (() -> Void)?
     @Binding public var performAction: () -> Void
     
-    /// Initialize with an optional pre-action and post-aciton. Also optionally supply a binding to
+    /// Initialize with an optional pre-action and post-action. Also optionally supply a binding to
     /// expose a method to programmatically call the button's action.
     ///
     /// - Parameters:
