@@ -77,11 +77,11 @@ internal struct OpenSettingsInjectionView<Content: View>: View {
     public let content: Content
     
     public var body: some View {
-        Group {
-            if #available(macOS 14, *) {
-                // make a hidden settings link so we can hijack it's button action
-                ZStack {
-#if swift(>=5.9) // prevents compile error in Xcode 14 because SettingsLink is not in its macOS SDK
+        if #available(macOS 14, *) {
+            // make a hidden settings link so we can hijack its button action
+            content
+                .overlay {
+                    #if swift(>=5.9) // prevents compile error in Xcode 14 because SettingsLink is not in its macOS SDK
                     SettingsLink {
                         // Text(verbatim: "")
                         Rectangle().fill(.clear)
@@ -89,16 +89,14 @@ internal struct OpenSettingsInjectionView<Content: View>: View {
                     }
                     .prePostActionsButtonStyle(performAction: $closure)
                     .frame(width: 0, height: 0)
-                    .opacity(0) // TODO: not sure if this is needed or will work
-#endif
-                    
-                    content
+                    .opacity(0)
+                    #endif
                 }
-            } else {
-                content
-            }
+                .environment(\.openSettings, $closure.wrappedValue)
+        } else {
+            content
+                .environment(\.openSettings, $closure.wrappedValue)
         }
-        .environment(\.openSettings, $closure.wrappedValue)
     }
 }
 
