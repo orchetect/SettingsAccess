@@ -93,6 +93,8 @@ Try the [Demo](Demo) example project to see the library in action.
 
 ## Requirements
 
+Requires Xcode 15.0 or higher.
+
 Supports macOS 11.0+.
 
 ## Author
