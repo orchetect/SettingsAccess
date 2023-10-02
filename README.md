@@ -14,14 +14,14 @@ As of macOS 14 Sonoma:
   1. There is no way to detect when the user has clicked this button if additional code is desired to run before or after the opening of the `Settings` scene.
   2. There is **no** way to programmatically open the `Settings` scene.
   
-- These restrictons become problematic in many scenarios. Some examples that are currently impossible without **SettingsAccess**:
+- These restrictions become problematic in many scenarios. Some examples that are currently impossible without **SettingsAccess**:
   - You are building a window-based `MenuBarExtra` and want to have a button that opens `Settings` and also dismisses the window.
   - You want to open the `Settings` scene in response to a user action in your application that requires the user manipulate a setting that may be invalid.
 
 ## Solution
 
 - **SettingsAccess** provides an environment method called `openSettings()` that can be called anywhere in the view hierarchy to programmatically open the Settings scene. (See [Getting Started](#Getting-Started) below for an example of its usage.)
-
+  - Due to SwiftUI limitations, this method is not usable inside of menus (including menu-based MenuBarExtra). In that scenario, a `SettingsLink(label:preAction:postAction:)` initializer is provided to allow custom code to run before and/or after the `Settings` scene is opened.
 - **SettingsAccess** is also backwards compatible from macOS 11 Big Sur and later. Calling `openSettings()` will use the correct method to open the Settings scene for each supported operating system automatically.
 - No private API is used, so it is safe for the Mac App Store.
 
@@ -32,6 +32,8 @@ As of macOS 14 Sonoma:
 Also, due to how SwiftUI `Button` works, it is impossible to attach a simultaneous gesture to attempt to detect a button press.
 
 **SettingsAccess** uses a custom `Button` style which, when applied directly to `SettingsLink`, allows us to capture the `Button` press action and export a wrapper method as an environment method called `openSettings` that we can use.
+
+The same button style is usable on `SettingsLink` directly in order to run code before and/or after the `Settings` scene is opened.
 
 More info and a deep-dive can be found in [this reddit post](https://www.reddit.com/r/SwiftUI/comments/16ibgy3/settingslink_on_macos_14_why_it_sucks_and_how_i/).
 
@@ -75,7 +77,8 @@ Add SettingsAccess as a dependency using Swift Package Manager.
    }
    ```
 
-3. In any subview where needed, add the environment method declaration. Then the Settings scene may be opened programmatically by calling this method.
+3. In any subview where needed, add the environment method declaration. Then the Settings scene may be opened
+   programmatically by calling this method.
 
    ```swift
    struct ContentView: View {
@@ -83,6 +86,27 @@ Add SettingsAccess as a dependency using Swift Package Manager.
      
        var body: some View {
            Button("Open Settings") { openSettings() }
+       }
+   }
+   ```
+
+4. If using a menu-based MenuBarExtra, do not apply `.openSettingsAccess()` to the enclosed menu.
+   `openSettings()` cannot be used here due to limitations of SwiftUI limitations. Instead, use the custom
+   `SettingsLink` initializer to run code before and/or after the menu item opens the `Settings` scene if desired.
+   
+   ```swift
+   @main
+   struct MyApp: App {
+       var body: some Scene {
+           MenuBarExtra {
+               SettingsLink {
+                    Text("Settings...")
+               } preAction: {
+                   // code to run before Settings opens
+               } postAction: {
+                   // code to run after Settings opens
+               }
+           }
        }
    }
    ```
@@ -96,10 +120,6 @@ Try the [Demo](Demo) example project to see the library in action.
 Requires Xcode 15.0 or higher.
 
 Supports macOS 11.0 or higher.
-
-## Known Issues
-
-- It is not possible to call `openSettings()` from within a menu-based MenuBarExtra due to how SwiftUI builds menus. See [this thread](https://github.com/orchetect/SettingsAccess/issues/2) for details.
 
 ## Author
 
