@@ -9,28 +9,6 @@
 import Foundation
 import SwiftUI
 
-// MARK: - Environment Method
-
-@available(macOS 10.15, *)
-@available(iOS, unavailable)
-@available(tvOS, unavailable)
-@available(watchOS, unavailable)
-private struct OpenSettingsKey: EnvironmentKey {
-    static let defaultValue: () -> Void = { }
-}
-
-@available(macOS 10.15, *)
-@available(iOS, unavailable)
-@available(tvOS, unavailable)
-@available(watchOS, unavailable)
-extension EnvironmentValues {
-    /// Opens the app's Settings scene. Call this as a method.
-    public var openSettings: () -> Void {
-        get { self[OpenSettingsKey.self] }
-        set { self[OpenSettingsKey.self] = newValue }
-    }
-}
-
 @available(macOS 10.15, *)
 @available(iOS, unavailable)
 @available(tvOS, unavailable)
@@ -77,22 +55,23 @@ internal struct OpenSettingsInjectionView<Content: View>: View {
     public let content: Content
     
     public var body: some View {
-        if #available(macOS 14, *) {
-            // make a hidden settings link so we can hijack its button action
-            content
-                .background {
-                    SettingsLink {
-                        Rectangle().fill(.clear)
+        Group {
+            if #available(macOS 14, *) {
+                // make a hidden settings link so we can hijack its button action
+                content
+                    .background {
+                        SettingsLink {
+                            Rectangle().fill(.clear)
+                        }
+                        .prePostActionsButtonStyle(performAction: openSettings.closureBinding)
+                        .frame(width: 0, height: 0)
+                        .opacity(0)
                     }
-                    .prePostActionsButtonStyle(performAction: $closure)
-                    .frame(width: 0, height: 0)
-                    .opacity(0)
-                }
-                .environment(\.openSettings, $closure.wrappedValue)
-        } else {
-            content
-                .environment(\.openSettings, $closure.wrappedValue)
+            } else {
+                content
+            }
         }
+        .environment(\.openSettings, openSettings)
     }
 }
 
