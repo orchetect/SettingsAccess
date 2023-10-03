@@ -20,7 +20,7 @@ As of macOS 14 Sonoma:
 
 ## Solution
 
-- **SettingsAccess** provides an environment method called `openSettings()` that can be called anywhere in the view hierarchy to programmatically open the `Settings` scene.
+- **SettingsAccess** provides a SwiftUI environment method called `openSettings()` that can be called anywhere in the view hierarchy to programmatically open the `Settings` scene.
   
   > Note: Due to SwiftUI limitations, this method is not usable within a `menu`-based `MenuBarExtra`. In that context, the custom `SettingsLink` initializer described below may be used.
 - **SettingsAccess** also provides an initializer for `SettingsLink` which provides two closures allowing execution of arbitrary code before and/or after opening the `Settings` scene.
