@@ -19,17 +19,19 @@ func openSettingsLegacyOS() -> Bool {
         return false
     }
     
-    let selector: Selector
-    if #available(macOS 13, *) {
-        selector = Selector(("showSettingsWindow:"))
-    } else {
-        selector = Selector(("showPreferencesWindow:"))
+    func trySelector(_ selector: Selector) -> Bool {
+        guard NSApp.responds(to: selector) else { return false }
+        NSApp.sendAction(selector, to: nil, from: nil)
+        return true
     }
     
-    guard NSApp.responds(to: selector) else { return false }
-    NSApp.sendAction(selector, to: nil, from: nil)
+    // macOS 12
+    if trySelector(Selector(("showSettingsWindow:"))) { return true }
     
-    return true
+    // macOS 11 and earlier
+    if trySelector(Selector(("showPreferencesWindow:"))) { return true }
+    
+    return false
 }
 
 #endif
