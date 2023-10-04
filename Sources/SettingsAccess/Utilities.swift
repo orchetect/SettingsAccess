@@ -20,8 +20,8 @@ func openSettingsLegacyOS() throws {
     }
     
     func trySelector(_ selector: Selector) -> Bool {
-        guard NSApp.responds(to: selector) else { return false }
-        NSApp.sendAction(selector, to: nil, from: nil)
+        guard NSApp.delegate?.responds(to: selector) == true else { return false }
+        NSApp.sendAction(selector, to: NSApp.delegate, from: nil)
         return true
     }
     
