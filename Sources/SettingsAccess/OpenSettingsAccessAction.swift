@@ -50,17 +50,17 @@ public class OpenSettingsAccessAction: ObservableObject {
     // Default to legacy Settings/Preferences window call.
     // This closure will be replaced with the new SettingsLink trigger later.
     @Published
-    var closure: () -> Void = {
+    var closure: () -> Bool = {
         openSettingsLegacyOS()
     }
     
-    private(set) var closureBinding: Binding<() -> Void> = .constant({ })
+    private(set) var closureBinding: Binding<() -> Bool> = .constant({ false })
     
     // Set up a binding that allows us to update the closure property with a new closure later.
     internal init() {
         closureBinding = Binding(
             get: { [weak self] in
-                self?.closure ?? { }
+                self?.closure ?? { false }
             }, set: {  [weak self] newValue in
                 self?.closure = newValue
             }
@@ -79,7 +79,8 @@ public class OpenSettingsAccessAction: ObservableObject {
     ///         }
     ///     }
     /// }
-    public func callAsFunction() {
+    @discardableResult
+    public func callAsFunction() -> Bool {
         closure()
     }
 }

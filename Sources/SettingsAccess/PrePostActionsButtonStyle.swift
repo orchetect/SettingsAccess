@@ -21,7 +21,7 @@ import SwiftUI
 public struct PrePostActionsButtonStyle: PrimitiveButtonStyle {
     public let preAction: (() -> Void)?
     public let postAction: (() -> Void)?
-    @Binding public var performAction: () -> Void
+    @Binding public var performAction: () -> Bool
     
     /// Initialize with an optional pre-action and post-action. Also optionally supply a binding to
     /// expose a method to programmatically call the button's action.
@@ -30,14 +30,16 @@ public struct PrePostActionsButtonStyle: PrimitiveButtonStyle {
     ///   - preAction: Closure to execute before the button's action.
     ///   - postAction: Closure to execute after the button's action.
     ///   - performAction: Binding to expose a method to programmatically call the button's action.
+    ///     Returns `true` if the action was performed.
+    ///     This may return `false` if SwiftUI did not construct the button.
     public init(
         preAction: (() -> Void)?,
         postAction: (() -> Void)?,
-        performAction: Binding<(() -> Void)> = .constant { }
+        performAction: Binding<(() -> Bool)>? = nil
     ) {
         self.preAction = preAction
         self.postAction = postAction
-        self._performAction = performAction
+        self._performAction = performAction ?? .constant { false }
     }
     
     // note: this never gets called when used in a menu instead of a View
@@ -46,6 +48,7 @@ public struct PrePostActionsButtonStyle: PrimitiveButtonStyle {
         DispatchQueue.main.async {
             performAction = {
                 configuration.trigger()
+                return true
             }
         }
         
@@ -76,16 +79,16 @@ public struct PrePostActionsButtonStyle: PrimitiveButtonStyle {
 private struct PrePostActionsButtonStyleModifier: ViewModifier {
     let preAction: (() -> Void)?
     let postAction: (() -> Void)?
-    @Binding var performAction: () -> Void
+    @Binding var performAction: () -> Bool
     
     init(
         preAction: (() -> Void)?,
         postAction: (() -> Void)?,
-        performAction: Binding<(() -> Void)> = .constant { }
+        performAction: Binding<(() -> Bool)>? = nil
     ) {
         self.preAction = preAction
         self.postAction = postAction
-        self._performAction = performAction
+        self._performAction = performAction ?? .constant { false }
     }
     
     func body(content: Content) -> some View {
@@ -107,16 +110,24 @@ extension View {
     /// Convenience to apply ``PrePostActionsButtonStyle``.
     /// Allows execution of code before and/or after user clicks a button.
     /// Also provides a binding to a method which can programmatically call the button's action.
+    ///
+    /// - Parameters:
+    ///   - preAction: Closure to execute before the button's action.
+    ///   - postAction: Closure to execute after the button's action.
+    ///   - performAction: Binding to expose a method to programmatically call the button's action.
+    ///     Returns `true` if the action was performed.
+    ///     This may return `false` if SwiftUI did not construct the button.
     public func prePostActionsButtonStyle(
         preAction: (() -> Void)? = nil,
         postAction: (() -> Void)? = nil,
-        performAction: Binding<(() -> Void)> = .constant { }
+        performAction: Binding<(() -> Bool)>? = nil
     ) -> some View {
         modifier(
             PrePostActionsButtonStyleModifier(
                 preAction: preAction,
                 postAction: postAction,
-                performAction: performAction)
+                performAction: performAction ?? .constant { false }
+            )
         )
     }
 }

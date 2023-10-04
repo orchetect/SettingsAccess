@@ -48,7 +48,7 @@ extension View {
 @available(watchOS, unavailable)
 internal struct OpenSettingsInjectionView<Content: View>: View {
     @Environment(\.openSettings) public var openSettings
-    @State private var closure: () -> Void = {
+    @State private var closure: () -> Bool = {
         openSettingsLegacyOS()
     }
     
