@@ -11,7 +11,7 @@ import AppKit
 
 /// Use old API to open Settings scene on macOS versions prior to macOS 14.
 /// This method has no effect on macOS 14 or later.
-public func openSettingsLegacyOS() {
+func openSettingsLegacyOS() {
     if #available(macOS 14, *) {
         // sendAction methods are deprecated; must use SettingsLink View
         // this should never happen but we'll throw an assert just in case
