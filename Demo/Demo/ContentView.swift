@@ -13,7 +13,7 @@ struct ContentView: View {
     var body: some View {
         VStack(spacing: 20) {
             Button("Open Settings Programmatically") {
-                openSettings()
+                do { try openSettings() } catch { print(error) }
             }
             
             if #available(macOS 14, *) {

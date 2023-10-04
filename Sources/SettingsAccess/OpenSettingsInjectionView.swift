@@ -33,7 +33,7 @@ extension View {
     ///     @Environment(\.openSettings) var openSettings
     ///
     ///     var body: some View {
-    ///         Button("Open Settings") { openSettings() }
+    ///         Button("Open Settings") { try? openSettings() }
     ///     }
     /// }
     /// ```
@@ -47,14 +47,11 @@ extension View {
 @available(tvOS, unavailable)
 @available(watchOS, unavailable)
 internal struct OpenSettingsInjectionView<Content: View>: View {
-    @Environment(\.openSettings) public var openSettings
-    @State private var closure: () -> Bool = {
-        openSettingsLegacyOS()
-    }
+    @Environment(\.openSettings) private var openSettings
     
-    public let content: Content
+    let content: Content
     
-    public var body: some View {
+    var body: some View {
         Group {
             if #available(macOS 14, *) {
                 // make a hidden settings link so we can hijack its button action

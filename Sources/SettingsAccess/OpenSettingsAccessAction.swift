@@ -9,7 +9,8 @@
 import Foundation
 import SwiftUI
 
-// Note: we shouldn't name this `OpenSettingsAction` because that's the name of Apple's private action
+// NOTE: we shouldn't name this `OpenSettingsAction` because that's the name of Apple's private action
+
 /// An action that opens the app's Settings scene.
 ///
 /// Use the ``SwiftUI/EnvironmentValues/openSettings`` environment value to get the instance of this structure for a given `Environment`.
@@ -34,14 +35,15 @@ import SwiftUI
 /// }
 /// ```
 ///
-/// In any subview where needed, add the environment method declaration. Then the `Settings` scene may be opened programmatically by calling this method.
+/// In any subview where needed, add the environment method declaration.
+/// Then the `Settings` scene may be opened programmatically by calling this method.
 ///
 /// ```swift
 /// struct ContentView: View {
 ///     @Environment(\.openSettings) private var openSettings
 ///
 ///     var body: some View {
-///         Button("Open Settings") { openSettings() }
+///         Button("Open Settings") { try? openSettings() }
 ///     }
 /// }
 /// ```
@@ -49,22 +51,35 @@ public class OpenSettingsAccessAction: ObservableObject {
     // Closure to run when `openSettings()` is called.
     // Default to legacy Settings/Preferences window call.
     // This closure will be replaced with the new SettingsLink trigger later.
-    @Published
-    var closure: () -> Bool = {
-        openSettingsLegacyOS()
-    }
+    private var closure: (() throws -> Void)?
     
-    private(set) var closureBinding: Binding<() -> Bool> = .constant({ false })
+    private(set) var closureBinding: Binding<(() -> Void)?> = .constant(nil)
     
     // Set up a binding that allows us to update the closure property with a new closure later.
     internal init() {
-        closureBinding = Binding(
-            get: { [weak self] in
-                self?.closure ?? { false }
-            }, set: {  [weak self] newValue in
-                self?.closure = newValue
+        if #available(macOS 14, *) {
+            // closure will be updated by way of binding later
+            closureBinding = Binding(
+                // get is never actually used, but it's provided in case.
+                get: { [weak self] in
+                    guard let closure = self?.closure else { return nil }
+                    return { try? closure() }
+                },
+                set: { [weak self] newValue in
+                    if let newValue {
+                        self?.closure = { newValue() }
+                    } else {
+                        self?.closure = nil
+                    }
+                }
+            )
+        } else {
+            // we don't need the binding since it's only set by the internal SettingsLink.
+            // instead, we can just set the closure once to call the legacy method.
+            closure = {
+                try openSettingsLegacyOS()
             }
-        )
+        }
     }
     
     /// Don’t call this method directly. SwiftUI calls it for you when you call the `OpenSettingsAccessAction` instance that you get from the Environment:
@@ -75,13 +90,30 @@ public class OpenSettingsAccessAction: ObservableObject {
     ///
     ///     var body: some View {
     ///         Button("Open Settings") {
-    ///             openSettings() // Implicitly calls openSettings.callAsFunction()
+    ///             try? openSettings() // Implicitly calls openSettings.callAsFunction()
     ///         }
     ///     }
     /// }
-    @discardableResult
-    public func callAsFunction() -> Bool {
-        closure()
+    /// ```
+    ///
+    /// - Throws: ``OpenSettingsError``
+    public func callAsFunction() throws {
+        guard let closure else {
+            throw OpenSettingsError.settingsLinkNotConnected
+        }
+        
+        do {
+            try closure()
+        } catch let e as LegacyOpenSettingsError {
+            switch e {
+            case .selectorNotFound:
+                throw OpenSettingsError.selectorNotFound
+            case .unsupportedPlatform:
+                throw OpenSettingsError.unsupportedPlatform
+            }
+        } catch {
+            throw error // rethrow if a different error
+        }
     }
 }
 

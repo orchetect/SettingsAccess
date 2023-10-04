@@ -37,7 +37,7 @@ public func SettingsLink<Label: View>(
         Button(
             action: {
                 preAction()
-                openSettingsLegacyOS()
+                try? openSettingsLegacyOS() // fail silently
                 postAction()
             },
             label: label
