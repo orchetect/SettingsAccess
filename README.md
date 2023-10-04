@@ -87,7 +87,7 @@ import SettingsAccess
 
 ### 2. Use in a MenuBarExtra Menu
 
-If using a menu-based `MenuBarExtra`, do not apply `openSettingsAccess()` to the menu content. `openSettings()` cannot be used due to limitations of SwiftUI.
+If using a menu-based `MenuBarExtra`, do not apply `openSettingsAccess()` to the menu content. `openSettings()` cannot be used there due to limitations of SwiftUI.
 
 Instead, use the custom `SettingsLink` initializer to add a Settings menu item capable of running code before and/or after opening the `Settings` scene.
 
