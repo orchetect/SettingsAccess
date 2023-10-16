@@ -44,7 +44,7 @@ Add SettingsAccess as a dependency using Swift Package Manager.
 - In a Swift Package, add it to the Package.swift dependencies:
 
   ```swift
-  .package(url: "https://github.com/orchetect/SettingsAccess", from: "1.3.0")
+  .package(url: "https://github.com/orchetect/SettingsAccess", from: "1.4.0")
   ```
 
 ## Getting Started
