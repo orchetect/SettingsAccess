@@ -125,9 +125,9 @@ Try the [Demo](Demo) example project to see the library in action.
 
 ## Requirements
 
-Requires Xcode 15.0 or higher.
+Requires Xcode 15.0 or higher to build.
 
-Supports macOS 11.0 or higher.
+Once compiled, supports macOS 11.0 or higher.
 
 ## How It Works (For Nerds)
 
