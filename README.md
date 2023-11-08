@@ -29,6 +29,10 @@ As of macOS 14 Sonoma:
 
 See [Getting Started](#Getting-Started) below for example usage.
 
+## Limitations
+
+**SettingsAccess** will only work **within a SwiftUI context**. Which means it requires at least one SwiftUI view and for that view to be instanced and its body invoked. Which means it cannot simply be used globally. This is 100% an Apple-imposed limitation.
+
 ## Using the Package
 
 ### Swift Package Manager (SPM)
