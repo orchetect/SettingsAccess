@@ -23,7 +23,8 @@ private struct OpenSettingsKey: EnvironmentKey {
 @available(watchOS, unavailable)
 extension EnvironmentValues {
     /// Opens the app's Settings scene. Call this as a method.
-    public var openSettings: OpenSettingsAccessAction {
+    @_disfavoredOverload
+    public var openSettingsLegacy: OpenSettingsAccessAction {
         get { self[OpenSettingsKey.self] }
         set { /* self[OpenSettingsKey.self] = newValue */ } // only allow use of the original default instance
     }

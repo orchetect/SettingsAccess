@@ -17,9 +17,9 @@ import SwiftUI
 /// Then call the instance to open the Settings scene.
 /// You call the instance directly because it defines a ``callAsFunction()`` method that Swift calls when you call the instance.
 ///
-/// In order for `openSettings` to operate, the `openSettingsAccess` view modifier must be applied to an ancestor of the view hierarchy.
+/// In order for `openSettingsLegacy` to operate, the `openSettingsAccess` view modifier must be applied to an ancestor of the view hierarchy.
 ///
-/// Attach the `openSettingsAccess` view modifier to the base view whose subviews needs access to the `openSettings` method.
+/// Attach the `openSettingsAccess` view modifier to the base view whose subviews needs access to the `openSettingsLegacy` method.
 ///
 /// ```swift
 /// @main
@@ -40,15 +40,15 @@ import SwiftUI
 ///
 /// ```swift
 /// struct ContentView: View {
-///     @Environment(\.openSettings) private var openSettings
+///     @Environment(\.openSettingsLegacy) private var openSettingsLegacy
 ///
 ///     var body: some View {
-///         Button("Open Settings") { try? openSettings() }
+///         Button("Open Settings") { try? openSettingsLegacy() }
 ///     }
 /// }
 /// ```
 public class OpenSettingsAccessAction: ObservableObject {
-    // Closure to run when `openSettings()` is called.
+    // Closure to run when `openSettingsLegacy()` is called.
     // Default to legacy Settings/Preferences window call.
     // This closure will be replaced with the new SettingsLink trigger later.
     private var closure: (() throws -> Void)?
@@ -90,7 +90,7 @@ public class OpenSettingsAccessAction: ObservableObject {
     ///
     ///     var body: some View {
     ///         Button("Open Settings") {
-    ///             try? openSettings() // Implicitly calls openSettings.callAsFunction()
+    ///             try? openSettingsLegacy() // Implicitly calls openSettingsLegacy.callAsFunction()
     ///         }
     ///     }
     /// }

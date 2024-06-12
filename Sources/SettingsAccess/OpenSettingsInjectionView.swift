@@ -14,8 +14,8 @@ import SwiftUI
 @available(tvOS, unavailable)
 @available(watchOS, unavailable)
 extension View {
-    /// Wires up the `openSettings` environment method for a view hierarchy that allows opening the
-    /// app's Settings scene.
+    /// Wires up the `openSettingsLegacy` environment method for a view hierarchy that allows
+    /// opening the app's Settings scene.
     ///
     /// Example usage:
     ///
@@ -30,10 +30,10 @@ extension View {
     /// }
     ///
     /// struct ContentView: View {
-    ///     @Environment(\.openSettings) var openSettings
+    ///     @Environment(\.openSettingsLegacy) var openSettingsLegacy
     ///
     ///     var body: some View {
-    ///         Button("Open Settings") { try? openSettings() }
+    ///         Button("Open Settings") { try? openSettingsLegacy() }
     ///     }
     /// }
     /// ```
@@ -47,7 +47,7 @@ extension View {
 @available(tvOS, unavailable)
 @available(watchOS, unavailable)
 internal struct OpenSettingsInjectionView<Content: View>: View {
-    @Environment(\.openSettings) private var openSettings
+    @Environment(\.openSettingsLegacy) private var openSettingsLegacy
     
     let content: Content
     
@@ -60,7 +60,7 @@ internal struct OpenSettingsInjectionView<Content: View>: View {
                         SettingsLink {
                             Rectangle().fill(.clear)
                         }
-                        .prePostActionsButtonStyle(performAction: openSettings.closureBinding)
+                        .prePostActionsButtonStyle(performAction: openSettingsLegacy.closureBinding)
                         .frame(width: 0, height: 0)
                         .opacity(0)
                     }
@@ -68,7 +68,7 @@ internal struct OpenSettingsInjectionView<Content: View>: View {
                 content
             }
         }
-        .environment(\.openSettings, openSettings)
+        .environment(\.openSettingsLegacy, openSettingsLegacy)
     }
 }
 

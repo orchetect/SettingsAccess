@@ -38,7 +38,11 @@ struct MenuBarExtraMenuView: View {
             Text("Settings...")
         } preAction: {
             // code to run before Settings opens
-            NSApp.activate(ignoringOtherApps: true) // this does nothing if running from Xcode, but running as a standalone app it will work
+            
+            // this does nothing if running from Xcode, but running as a standalone app it will work.
+            // the reason we want to activate the app is that the native SettingsLink does not bring
+            // the Settings window to the front in a dockless menubar app.
+            NSApp.activate(ignoringOtherApps: true)
         } postAction: {
             // code to run after Settings opens
         }
