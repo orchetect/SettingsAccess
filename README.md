@@ -2,6 +2,16 @@
 
 [![Platforms - macOS 11+](https://img.shields.io/badge/platforms-macOS%2011+-lightgrey.svg?style=flat)](https://developer.apple.com/swift) ![Swift 5.9](https://img.shields.io/badge/Swift-5.9-orange.svg?style=flat) [![Xcode 15](https://img.shields.io/badge/Xcode-15-blue.svg?style=flat)](https://developer.apple.com/swift) [![License: MIT](http://img.shields.io/badge/license-MIT-lightgrey.svg?style=flat)](https://github.com/orchetect/SettingsAccess/blob/main/LICENSE)
 
+## Xcode 16 Update
+
+> **💡 Update for Xcode 16**
+>
+> Xcode 16 now makes Apple's previously-private [`openSettings`](https://developer.apple.com/documentation/swiftui/environmentvalues/opensettings) environment method public, and back-ports it to macOS 14.
+>
+> While this is welcome progress, it still is only incremental and the vast majority of SettingsAccess' functionality is still needed in many scenarios.
+>
+> SettingsAccess 2.0.0 adds support for compiling with Xcode 16 by renaming its `openSettings` method to `openSettingsLegacy`. For projects targeting macOS 14+ you may opt to use the new native `openSettings` method. For projects targeting older versions of macOS, use `openSettingsLegacy`.
+
 ## Why
 
 As of macOS 14 Sonoma:
@@ -11,8 +21,8 @@ As of macOS 14 Sonoma:
   ![No Dice](Images/no-dice.png)
 
 - This presents two major restrictions:
-  1. There is no way to detect when the user has clicked this button if additional code is desired to run before or after the opening of the `Settings` scene.
-  2. There is **no** way to programmatically open the `Settings` scene.
+  1. There is no simple way to detect when the user has clicked this button if additional code is desired to run before or after the opening of the `Settings` scene.
+  2. There is **no** way to programmatically open the `Settings` scene. (Update: Xcode 16 adds support but it is still limited.)
   
 - These restrictions become problematic in many scenarios. Some examples that are currently impossible without **SettingsAccess**:
   - You are building a window-based `MenuBarExtra` and want to have a button that activates the app, opens `Settings`, and then also dismisses the window.
@@ -29,7 +39,7 @@ See [Getting Started](#Getting-Started) below for example usage.
 
 ## Limitations
 
-- **SettingsAccess** will only work **within a SwiftUI context**. Which means it requires at least one SwiftUI view and for that view to be instanced and its body invoked. Which means it cannot simply be used globally. This is 100% an Apple-imposed limitation.
+- **SettingsAccess** will only work **within a SwiftUI context**. Which means it requires at least one SwiftUI view and for that view to be instanced and its body invoked. Which means it cannot simply be used globally. This is 100% an Apple-imposed limitation because of the internal limitations of `SettingsLink`.
 - Due to SwiftUI limitations, `openSettingsLegacy()` is not usable within a `menu`-based `MenuBarExtra`. In that context, the custom `SettingsLink` initializer may be used to run code before/after opening the `Settings` scene.
 
 ## Using the Package
@@ -47,7 +57,7 @@ Add SettingsAccess as a dependency using Swift Package Manager.
 - In a Swift Package, add it to the Package.swift dependencies:
 
   ```swift
-  .package(url: "https://github.com/orchetect/SettingsAccess", from: "1.4.0")
+  .package(url: "https://github.com/orchetect/SettingsAccess", from: "2.0.0")
   ```
 
 ## Getting Started
