@@ -13,7 +13,7 @@ import AppKit
 /// This method has no effect on macOS 14 or later and will always throw an error.
 ///
 /// - Throws: `LegacyOpenSettingsError`
-func openSettingsLegacyOS() throws {
+@MainActor func openSettingsLegacyOS() throws {
     if #available(macOS 14, *) {
         // sendAction methods are deprecated on macOS 14+ and we must use a SettingsLink View instead
         throw LegacyOpenSettingsError.unsupportedPlatform

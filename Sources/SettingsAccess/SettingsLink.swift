@@ -21,7 +21,7 @@ import SwiftUI
 @available(iOS, unavailable)
 @available(tvOS, unavailable)
 @available(watchOS, unavailable)
-@ViewBuilder
+@MainActor @ViewBuilder
 public func SettingsLink<Label: View>(
     @ViewBuilder label: () -> Label,
     preAction: @escaping () -> Void,

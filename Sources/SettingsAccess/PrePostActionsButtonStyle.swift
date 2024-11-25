@@ -21,7 +21,7 @@ import SwiftUI
 public struct PrePostActionsButtonStyle: PrimitiveButtonStyle {
     public let preAction: (() -> Void)?
     public let postAction: (() -> Void)?
-    @Binding public var performAction: (() -> Void)?
+    @Binding public var performAction: (@MainActor @Sendable () -> Void)?
     
     /// Initialize with an optional pre-action and post-action. Also optionally supply a binding to
     /// expose a method to programmatically call the button's action.
@@ -35,7 +35,7 @@ public struct PrePostActionsButtonStyle: PrimitiveButtonStyle {
     public init(
         preAction: (() -> Void)?,
         postAction: (() -> Void)?,
-        performAction: Binding<(() -> Void)?>? = nil
+        performAction: Binding<(@MainActor @Sendable () -> Void)?>? = nil
     ) {
         self.preAction = preAction
         self.postAction = postAction
@@ -45,10 +45,9 @@ public struct PrePostActionsButtonStyle: PrimitiveButtonStyle {
     // note: this never gets called when used in a menu instead of a View
     public func makeBody(configuration: Configuration) -> some View {
         // capture the button action
-        DispatchQueue.main.async {
-            performAction = {
-                configuration.trigger()
-            }
+        let trigger = configuration.trigger
+        performAction = { @MainActor [trigger] in
+            trigger()
         }
         
         if #available(macOS 12.0, *) { // role is macOS 12+
@@ -78,12 +77,12 @@ public struct PrePostActionsButtonStyle: PrimitiveButtonStyle {
 private struct PrePostActionsButtonStyleModifier: ViewModifier {
     let preAction: (() -> Void)?
     let postAction: (() -> Void)?
-    @Binding var performAction: (() -> Void)?
+    @Binding var performAction: (@MainActor @Sendable () -> Void)?
     
     init(
         preAction: (() -> Void)?,
         postAction: (() -> Void)?,
-        performAction: Binding<(() -> Void)?>? = nil
+        performAction: Binding<(@MainActor @Sendable () -> Void)?>? = nil
     ) {
         self.preAction = preAction
         self.postAction = postAction
@@ -119,7 +118,7 @@ extension View {
     public func prePostActionsButtonStyle(
         preAction: (() -> Void)? = nil,
         postAction: (() -> Void)? = nil,
-        performAction: Binding<(() -> Void)?>? = nil
+        performAction: Binding<(@MainActor @Sendable () -> Void)?>? = nil
     ) -> some View {
         modifier(
             PrePostActionsButtonStyleModifier(

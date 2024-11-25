@@ -47,32 +47,22 @@ import SwiftUI
 ///     }
 /// }
 /// ```
-public class OpenSettingsAccessAction: ObservableObject {
+@MainActor public final class OpenSettingsAccessAction: ObservableObject {
+    typealias Closure = @MainActor @Sendable () throws -> Void
+    typealias NonThrowingClosure = @MainActor @Sendable () -> Void
+    
     // Closure to run when `openSettingsLegacy()` is called.
     // Default to legacy Settings/Preferences window call.
     // This closure will be replaced with the new SettingsLink trigger later.
-    private var closure: (() throws -> Void)?
+    private var closure: Closure?
     
-    private(set) var closureBinding: Binding<(() -> Void)?> = .constant(nil)
+    var closureBinding: Binding<NonThrowingClosure?> = .constant(nil)
     
     // Set up a binding that allows us to update the closure property with a new closure later.
     internal init() {
         if #available(macOS 14, *) {
             // closure will be updated by way of binding later
-            closureBinding = Binding(
-                // get is never actually used, but it's provided in case.
-                get: { [weak self] in
-                    guard let closure = self?.closure else { return nil }
-                    return { try? closure() }
-                },
-                set: { [weak self] newValue in
-                    if let newValue {
-                        self?.closure = { newValue() }
-                    } else {
-                        self?.closure = nil
-                    }
-                }
-            )
+            closureBinding = bindingFactory()
         } else {
             // we don't need the binding since it's only set by the internal SettingsLink.
             // instead, we can just set the closure once to call the legacy method.
@@ -80,6 +70,24 @@ public class OpenSettingsAccessAction: ObservableObject {
                 try openSettingsLegacyOS()
             }
         }
+    }
+    
+    @available(macOS 14, *)
+    private func bindingFactory() -> Binding<NonThrowingClosure?> {
+        Binding(
+            // get is never actually used, but it's provided in case.
+            get: { [weak self] in
+                guard let closure = self?.closure else { return nil }
+                return { try? closure() }
+            },
+            set: { [weak self] newValue in
+                if let newValue {
+                    self?.closure = newValue
+                } else {
+                    self?.closure = nil
+                }
+            }
+        )
     }
     
     /// Don’t call this method directly. SwiftUI calls it for you when you call the `OpenSettingsAccessAction` instance that you get from the Environment:
@@ -98,23 +106,27 @@ public class OpenSettingsAccessAction: ObservableObject {
     ///
     /// - Throws: ``OpenSettingsError``
     public func callAsFunction() throws {
-        guard let closure else {
-            throw OpenSettingsError.settingsLinkNotConnected
-        }
-        
-        do {
-            try closure()
-        } catch let e as LegacyOpenSettingsError {
-            switch e {
-            case .selectorNotFound:
-                throw OpenSettingsError.selectorNotFound
-            case .unsupportedPlatform:
-                throw OpenSettingsError.unsupportedPlatform
+        Task { @MainActor in
+            guard let closure else {
+                throw OpenSettingsError.settingsLinkNotConnected
             }
-        } catch {
-            throw error // rethrow if a different error
+            
+            do {
+                try closure()
+            } catch let e as LegacyOpenSettingsError {
+                switch e {
+                case .selectorNotFound:
+                    throw OpenSettingsError.selectorNotFound
+                case .unsupportedPlatform:
+                    throw OpenSettingsError.unsupportedPlatform
+                }
+            } catch {
+                throw error // rethrow if a different error
+            }
         }
     }
 }
+
+extension OpenSettingsAccessAction: Sendable { }
 
 #endif

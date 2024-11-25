@@ -13,8 +13,8 @@ import SwiftUI
 @available(iOS, unavailable)
 @available(tvOS, unavailable)
 @available(watchOS, unavailable)
-private struct OpenSettingsKey: EnvironmentKey {
-    static let defaultValue: OpenSettingsAccessAction = .init()
+@MainActor private struct OpenSettingsKey: @preconcurrency EnvironmentKey {
+    static let defaultValue = OpenSettingsAccessAction()
 }
 
 @available(macOS 10.15, *)
