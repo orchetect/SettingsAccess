@@ -3,18 +3,17 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 60;
 	objects = {
 
 /* Begin PBXBuildFile section */
-		E25F2B412AB297EB0015FAEE /* SettingsAccess in Frameworks */ = {isa = PBXBuildFile; productRef = E25F2B402AB297EB0015FAEE /* SettingsAccess */; };
+		E2CBCBAC2CF4496E00A4B485 /* SettingsAccess in Frameworks */ = {isa = PBXBuildFile; productRef = E2CBCBAB2CF4496E00A4B485 /* SettingsAccess */; };
 		E2F08CA82AB29791002036E0 /* DemoApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2F08CA72AB29791002036E0 /* DemoApp.swift */; };
 		E2F08CAA2AB29791002036E0 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2F08CA92AB29791002036E0 /* ContentView.swift */; };
 		E2F08CAC2AB29792002036E0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E2F08CAB2AB29792002036E0 /* Assets.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		E25F2B3E2AB297E40015FAEE /* SettingsAccess */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = SettingsAccess; path = ..; sourceTree = "<group>"; };
 		E2F08CA42AB29791002036E0 /* Demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Demo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E2F08CA72AB29791002036E0 /* DemoApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoApp.swift; sourceTree = "<group>"; };
 		E2F08CA92AB29791002036E0 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -27,7 +26,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E25F2B412AB297EB0015FAEE /* SettingsAccess in Frameworks */,
+				E2CBCBAC2CF4496E00A4B485 /* SettingsAccess in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -37,7 +36,6 @@
 		E2F08C9B2AB29791002036E0 = {
 			isa = PBXGroup;
 			children = (
-				E25F2B3E2AB297E40015FAEE /* SettingsAccess */,
 				E2F08CA62AB29791002036E0 /* Demo */,
 				E2F08CA52AB29791002036E0 /* Products */,
 			);
@@ -79,7 +77,7 @@
 			);
 			name = Demo;
 			packageProductDependencies = (
-				E25F2B402AB297EB0015FAEE /* SettingsAccess */,
+				E2CBCBAB2CF4496E00A4B485 /* SettingsAccess */,
 			);
 			productName = Demo;
 			productReference = E2F08CA42AB29791002036E0 /* Demo.app */;
@@ -109,6 +107,9 @@
 				Base,
 			);
 			mainGroup = E2F08C9B2AB29791002036E0;
+			packageReferences = (
+				E2CBCBAA2CF4496E00A4B485 /* XCLocalSwiftPackageReference "../../SettingsAccess" */,
+			);
 			productRefGroup = E2F08CA52AB29791002036E0 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -203,6 +204,7 @@
 				SDKROOT = macosx;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 6.0;
 			};
 			name = Debug;
 		};
@@ -259,6 +261,7 @@
 				MTL_FAST_MATH = YES;
 				SDKROOT = macosx;
 				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_VERSION = 6.0;
 			};
 			name = Release;
 		};
@@ -285,7 +288,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.orchetect.SettingsAccess.Demo${DEVELOPMENT_TEAM}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -312,7 +314,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.orchetect.SettingsAccess.Demo${DEVELOPMENT_TEAM}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
@@ -339,8 +340,15 @@
 		};
 /* End XCConfigurationList section */
 
+/* Begin XCLocalSwiftPackageReference section */
+		E2CBCBAA2CF4496E00A4B485 /* XCLocalSwiftPackageReference "../../SettingsAccess" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../../SettingsAccess;
+		};
+/* End XCLocalSwiftPackageReference section */
+
 /* Begin XCSwiftPackageProductDependency section */
-		E25F2B402AB297EB0015FAEE /* SettingsAccess */ = {
+		E2CBCBAB2CF4496E00A4B485 /* SettingsAccess */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = SettingsAccess;
 		};
