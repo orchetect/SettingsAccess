@@ -1,6 +1,6 @@
 # SettingsAccess
 
-[![Platforms - macOS 11+](https://img.shields.io/badge/platforms-macOS%2011+-lightgrey.svg?style=flat)](https://developer.apple.com/swift) ![Swift 5.9+](https://img.shields.io/badge/Swift-5.9+-orange.svg?style=flat) [![Xcode 15+](https://img.shields.io/badge/Xcode-15+-blue.svg?style=flat)](https://developer.apple.com/swift) [![License: MIT](http://img.shields.io/badge/license-MIT-lightgrey.svg?style=flat)](https://github.com/orchetect/SettingsAccess/blob/main/LICENSE)
+[![Platforms | macOS 11](https://img.shields.io/badge/platforms-macOS%2011-blue.svg?style=flat)](https://developer.apple.com/swift) [![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Forchetect%2FSettingsAccess%2Fbadge%3Ftype%3Dswift-versions)](https://swiftpackageindex.com/orchetect/SettingsAccess) [![Xcode 15](https://img.shields.io/badge/Xcode-15-blue.svg?style=flat)](https://developer.apple.com/swift) [![License: MIT](http://img.shields.io/badge/license-MIT-lightgrey.svg?style=flat)](https://github.com/orchetect/SettingsAccess/blob/main/LICENSE)
 
 ## Xcode 16 Update
 
@@ -57,7 +57,7 @@ Add SettingsAccess as a dependency using Swift Package Manager.
 - In a Swift Package, add it to the Package.swift dependencies:
 
   ```swift
-  .package(url: "https://github.com/orchetect/SettingsAccess", from: "2.0.0")
+  .package(url: "https://github.com/orchetect/SettingsAccess", from: "2.1.0")
   ```
 
 ## Getting Started
