@@ -144,11 +144,11 @@ Once compiled, supports macOS 11.0 or higher.
 
 ## How It Works (For Nerds)
 
-`SettingsLink` is a view that wraps a standard SwiftUI `Button` and its action calls a private environment method called `_openSettings` which we have no access to publicly. (A radar has been submitted asking Apple to make it public, but that may never happen.)
+`SettingsLink` is a view that wraps a standard SwiftUI `Button` and prior to Xcode 16, its action calls a private environment method called `_openSettings`. (As of Xcode 16 this method is now available publicly. See the [Xcode 16 Update](#Xcode-16-Update) section for more information.)
 
 It is worth noting that due to how SwiftUI `Button` works, it is impossible to attach a simultaneous gesture to attempt to detect a button press.
 
-The solution is the use of a custom `Button` style which, when applied directly to `SettingsLink`, allows us to capture the `Button` press action and export a wrapper method as an environment method called `openSettings` that we can use. This same button style can also let us run arbitrary code before and/or after the button action is triggered by the user.
+The solution is the use of a custom `Button` style which, when applied directly to `SettingsLink`, allows us to capture the `Button` press action and execute arbitrary code closures before and after the user presses the button. We can also export this method as an environment method called `openSettingsLegacy` that can be used in a backwards-compatible fashion prior to `openSettings` being made public by Apple.
 
 More info and a deep-dive can be found in [this reddit post](https://www.reddit.com/r/SwiftUI/comments/16ibgy3/settingslink_on_macos_14_why_it_sucks_and_how_i/).
 
