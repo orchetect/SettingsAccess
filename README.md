@@ -132,6 +132,65 @@ struct AppMenuView: View {
 }
 ```
 
+### 3. Wire up About Menu Item to Open the A Settings Window Tab
+
+It is possible to replace your app's standard "About" menu item and have it open the Settings window to a specific tab instead. SettingsAccess makes this possible on older versions of macOS prior to the `openSettings()` environment command being available.
+
+Using the custom `SettingsLink` with pre- and post- actions, you are able to set a UserDefaults-stored variable to the about page prior to the Settings window opening.
+
+```swift
+@main
+struct MyApp: App {
+    @AppStorage("selectedSettingsPage") private var selectedSettingsPage: SettingsPage = .general
+    
+    var body: some Scene {
+        WindowGroup {
+            ContentView()
+        }
+        .commands {
+            CommandGroup(replacing: .appInfo) {
+                SettingsLink {
+                    Text("About...")
+                } preAction: {
+                    selectedSettingsPage = .about
+                } postAction: {
+                    // none
+                }
+            }
+        }
+        
+        Settings { SettingsView() }
+    }
+}
+
+enum SettingsPage: String {
+    case general
+    case about
+}
+
+struct SettingsView: View {
+    @AppStorage("selectedSettingsPage") private var selectedSettingsPage: SettingsPage = .general
+    
+    var body: some View {
+        TabView(selection: $selectedSettingsPage) {
+            GeneralView()
+                .tabItem {
+                    Label("General", systemImage: "gear")
+                }
+                .tag(SettingsPage.general)
+                
+            
+            AboutView()
+                .tabItem {
+                    Label("About", systemImage: "info.bubble.fill")
+                }
+                .tag(SettingsPage.about)
+        }
+    }
+}
+
+```
+
 ## Example Code
 
 Try the [Demo](Demo) example project to see the library in action.
