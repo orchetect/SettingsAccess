@@ -1,7 +1,7 @@
 //
 //  Environment.swift
 //  SettingsAccess • https://github.com/orchetect/SettingsAccess
-//  © 2023 Steffan Andrews • Licensed under MIT License
+//  © 2026 Steffan Andrews • Licensed under MIT License
 //
 
 #if os(macOS)
@@ -13,7 +13,8 @@ import SwiftUI
 @available(iOS, unavailable)
 @available(tvOS, unavailable)
 @available(watchOS, unavailable)
-@MainActor private struct OpenSettingsKey: @preconcurrency EnvironmentKey {
+@MainActor
+private struct OpenSettingsKey: @preconcurrency EnvironmentKey {
     static let defaultValue = OpenSettingsAccessAction()
 }
 

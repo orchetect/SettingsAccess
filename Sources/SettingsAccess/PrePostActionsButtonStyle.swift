@@ -1,7 +1,7 @@
 //
 //  PrePostActionsButtonStyle.swift
 //  SettingsAccess • https://github.com/orchetect/SettingsAccess
-//  © 2023 Steffan Andrews • Licensed under MIT License
+//  © 2026 Steffan Andrews • Licensed under MIT License
 //
 
 #if os(macOS)
@@ -22,7 +22,7 @@ public struct PrePostActionsButtonStyle: PrimitiveButtonStyle {
     public let preAction: (() -> Void)?
     public let postAction: (() -> Void)?
     @Binding public var performAction: (@MainActor @Sendable () -> Void)?
-    
+
     /// Initialize with an optional pre-action and post-action. Also optionally supply a binding to
     /// expose a method to programmatically call the button's action.
     ///
@@ -39,9 +39,9 @@ public struct PrePostActionsButtonStyle: PrimitiveButtonStyle {
     ) {
         self.preAction = preAction
         self.postAction = postAction
-        self._performAction = performAction ?? .constant(nil)
+        _performAction = performAction ?? .constant(nil)
     }
-    
+
     // note: this never gets called when used in a menu instead of a View
     public func makeBody(configuration: Configuration) -> some View {
         // capture the button action
@@ -49,7 +49,7 @@ public struct PrePostActionsButtonStyle: PrimitiveButtonStyle {
         performAction = { @MainActor [trigger] in
             trigger()
         }
-        
+
         if #available(macOS 12.0, *) { // role is macOS 12+
             return Button(role: configuration.role) {
                 preAction?()
@@ -78,7 +78,7 @@ private struct PrePostActionsButtonStyleModifier: ViewModifier {
     let preAction: (() -> Void)?
     let postAction: (() -> Void)?
     @Binding var performAction: (@MainActor @Sendable () -> Void)?
-    
+
     init(
         preAction: (() -> Void)?,
         postAction: (() -> Void)?,
@@ -86,9 +86,9 @@ private struct PrePostActionsButtonStyleModifier: ViewModifier {
     ) {
         self.preAction = preAction
         self.postAction = postAction
-        self._performAction = performAction ?? .constant(nil)
+        _performAction = performAction ?? .constant(nil)
     }
-    
+
     func body(content: Content) -> some View {
         content.buttonStyle(
             PrePostActionsButtonStyle(

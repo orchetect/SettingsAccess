@@ -1,12 +1,11 @@
 //
 //  DemoApp.swift
-//  Demo
-//
-//  Created by Steffan Andrews on 2023-09-13.
+//  SettingsAccess • https://github.com/orchetect/SettingsAccess
+//  © 2026 Steffan Andrews • Licensed under MIT License
 //
 
-import SwiftUI
 import SettingsAccess
+import SwiftUI
 
 @main
 struct DemoApp: App {
@@ -15,7 +14,7 @@ struct DemoApp: App {
             ContentView()
                 .openSettingsAccess()
         }
-        
+
         if #available(macOS 13.0, *) { // MenuBarExtra only available on macOS 13+
             MenuBarExtra {
                 MenuBarExtraMenuView()
@@ -25,7 +24,7 @@ struct DemoApp: App {
                 Text("Demo")
             }
         }
-        
+
         Settings {
             SettingsView()
         }
@@ -38,7 +37,7 @@ struct MenuBarExtraMenuView: View {
             Text("Settings...")
         } preAction: {
             // code to run before Settings opens
-            
+
             // this does nothing if running from Xcode, but running as a standalone app it will work.
             // the reason we want to activate the app is that the native SettingsLink does not bring
             // the Settings window to the front in a dockless menubar app.
@@ -46,9 +45,9 @@ struct MenuBarExtraMenuView: View {
         } postAction: {
             // code to run after Settings opens
         }
-        
+
         Divider()
-        
+
         Button("Quit") {
             NSApp.terminate(nil)
         }
@@ -59,8 +58,7 @@ struct SettingsView: View {
     var body: some View {
         VStack {
             Text("Settings window.")
-                .frame(idealWidth: 400, maxWidth: .infinity,
-                       idealHeight: 200, maxHeight: .infinity)
+                .frame(idealWidth: 400, maxWidth: .infinity, idealHeight: 200, maxHeight: .infinity)
         }
         .padding()
     }

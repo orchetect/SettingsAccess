@@ -1,7 +1,7 @@
 //
 //  SettingsLink.swift
 //  SettingsAccess • https://github.com/orchetect/SettingsAccess
-//  © 2023 Steffan Andrews • Licensed under MIT License
+//  © 2026 Steffan Andrews • Licensed under MIT License
 //
 
 #if os(macOS)
@@ -22,8 +22,8 @@ import SwiftUI
 @available(tvOS, unavailable)
 @available(watchOS, unavailable)
 @MainActor @ViewBuilder
-public func SettingsLink<Label: View>(
-    @ViewBuilder label: () -> Label,
+public func SettingsLink(
+    @ViewBuilder label: () -> some View,
     preAction: @escaping () -> Void,
     postAction: @escaping () -> Void
 ) -> some View {

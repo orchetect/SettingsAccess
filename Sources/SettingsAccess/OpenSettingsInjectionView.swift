@@ -1,7 +1,7 @@
 //
 //  OpenSettingsInjectionView.swift
 //  SettingsAccess • https://github.com/orchetect/SettingsAccess
-//  © 2023 Steffan Andrews • Licensed under MIT License
+//  © 2026 Steffan Andrews • Licensed under MIT License
 //
 
 #if os(macOS)
@@ -46,11 +46,11 @@ extension View {
 @available(iOS, unavailable)
 @available(tvOS, unavailable)
 @available(watchOS, unavailable)
-internal struct OpenSettingsInjectionView<Content: View>: View {
+struct OpenSettingsInjectionView<Content: View>: View {
     @Environment(\.openSettingsLegacy) private var openSettingsLegacy
-    
+
     let content: Content
-    
+
     var body: some View {
         Group {
             if #available(macOS 14, *) {

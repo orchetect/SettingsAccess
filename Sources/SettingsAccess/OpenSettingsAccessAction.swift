@@ -1,7 +1,7 @@
 //
-//  Environment.swift
+//  OpenSettingsAccessAction.swift
 //  SettingsAccess • https://github.com/orchetect/SettingsAccess
-//  © 2023 Steffan Andrews • Licensed under MIT License
+//  © 2026 Steffan Andrews • Licensed under MIT License
 //
 
 #if os(macOS)
@@ -17,7 +17,8 @@ import SwiftUI
 /// Then call the instance to open the Settings scene.
 /// You call the instance directly because it defines a ``callAsFunction()`` method that Swift calls when you call the instance.
 ///
-/// In order for `openSettingsLegacy` to operate, the `openSettingsAccess` view modifier must be applied to an ancestor of the view hierarchy.
+/// In order for `openSettingsLegacy` to operate, the `openSettingsAccess` view modifier must be applied to an ancestor of the view
+/// hierarchy.
 ///
 /// Attach the `openSettingsAccess` view modifier to the base view whose subviews needs access to the `openSettingsLegacy` method.
 ///
@@ -47,19 +48,20 @@ import SwiftUI
 ///     }
 /// }
 /// ```
-@MainActor public final class OpenSettingsAccessAction: ObservableObject {
+@MainActor
+public final class OpenSettingsAccessAction: ObservableObject {
     typealias Closure = @MainActor @Sendable () throws -> Void
     typealias NonThrowingClosure = @MainActor @Sendable () -> Void
-    
+
     // Closure to run when `openSettingsLegacy()` is called.
     // Default to legacy Settings/Preferences window call.
     // This closure will be replaced with the new SettingsLink trigger later.
     private var closure: Closure?
-    
+
     var closureBinding: Binding<NonThrowingClosure?> = .constant(nil)
-    
+
     // Set up a binding that allows us to update the closure property with a new closure later.
-    internal init() {
+    init() {
         if #available(macOS 14, *) {
             // closure will be updated by way of binding later
             closureBinding = bindingFactory()
@@ -71,7 +73,7 @@ import SwiftUI
             }
         }
     }
-    
+
     @available(macOS 14, *)
     private func bindingFactory() -> Binding<NonThrowingClosure?> {
         Binding(
@@ -89,8 +91,9 @@ import SwiftUI
             }
         )
     }
-    
-    /// Don’t call this method directly. SwiftUI calls it for you when you call the `OpenSettingsAccessAction` instance that you get from the Environment:
+
+    /// Don’t call this method directly. SwiftUI calls it for you when you call the `OpenSettingsAccessAction` instance that you get from
+    /// the Environment:
     ///
     /// ```swift
     /// struct ContentView: View {
@@ -110,7 +113,7 @@ import SwiftUI
             guard let closure else {
                 throw OpenSettingsError.settingsLinkNotConnected
             }
-            
+
             do {
                 try closure()
             } catch let e as LegacyOpenSettingsError {
