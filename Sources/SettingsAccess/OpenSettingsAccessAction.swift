@@ -109,7 +109,7 @@ public final class OpenSettingsAccessAction: ObservableObject {
     ///
     /// - Throws: ``OpenSettingsError``
     public func callAsFunction() throws {
-        Task { @MainActor in
+        _ = Task { @MainActor in
             guard let closure else {
                 throw OpenSettingsError.settingsLinkNotConnected
             }
